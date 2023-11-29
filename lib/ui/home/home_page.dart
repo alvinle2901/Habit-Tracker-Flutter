@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:habit_tracker/root.dart';
+import 'package:habit_tracker/services/noti_service.dart';
 import 'package:habit_tracker/ui/auth/providers/auth_provider.dart';
 import 'package:habit_tracker/ui/components/custom_scaffold.dart';
 import 'package:habit_tracker/ui/components/status_button.dart';
@@ -31,9 +32,14 @@ class HomePage extends ConsumerWidget {
         child: Center(
           child: GestureDetector(
             onTap: () async {
-              await ref.read(authProvider).signOut();
-              Navigator.pushNamedAndRemoveUntil(
-                  context, Root.route, (route) => false);
+              // await ref.read(authProvider).signOut();
+              // Navigator.pushNamedAndRemoveUntil(
+              //     context, Root.route, (route) => false);
+              await NotificationService().cancelNotification();
+              await NotificationService().requestPermissions();
+
+              NotificationService()
+                  .showNotification(title: 'Sample title', body: 'It works!');
             },
             child: SvgPicture.asset(
               Assets.menuIcon,
@@ -109,7 +115,10 @@ class HomePage extends ConsumerWidget {
                                 const SizedBox(height: 12),
                                 ...data.map((e) => GestureDetector(
                                       onTap: () {
-                                        ref.read(selectedHabitProvider.notifier).state = e;
+                                        ref
+                                            .read(
+                                                selectedHabitProvider.notifier)
+                                            .state = e;
                                       },
                                       child: Container(
                                         height: 74,
@@ -191,7 +200,9 @@ class HomePage extends ConsumerWidget {
                                           children: Utils.weekDays
                                               .map(
                                                 (w) => StatusButton(
-                                                  value: e.frequency[w.labelDay]??0,
+                                                  value:
+                                                      e.frequency[w.labelDay] ??
+                                                          0,
                                                   size: 54,
                                                 ),
                                               )

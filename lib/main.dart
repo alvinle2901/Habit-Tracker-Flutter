@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:habit_tracker/firebase_options.dart';
 import 'package:habit_tracker/router.dart';
+import 'package:habit_tracker/services/noti_service.dart';
 import 'package:habit_tracker/ui/auth/login_page.dart';
 import 'package:habit_tracker/ui/auth/reset_password_page.dart';
 import 'package:habit_tracker/ui/auth/sign_up_page.dart';
@@ -16,6 +17,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ProviderScope(child: MyApp()));
 }
